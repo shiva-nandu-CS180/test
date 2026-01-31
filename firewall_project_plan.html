@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Rust Firewall - Complete Project Plan</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@300;500;700&display=swap');
+        
+        :root {
+            --primary: #000000;
+            --secondary: #1a1a1a;
+            --accent: #ffffff;
+            --accent-2: #cccccc;
+            --text: #ffffff;
+            --text-dim: #999999;
+            --success: #ffffff;
+            --warning: #bbbbbb;
+            --danger: #888888;
+            --code-bg: #0a0a0a;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+            color: var(--text);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        header {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+            border-radius: 20px;
+            margin-bottom: 3rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+        
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ffffff 0%, #cccccc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .subtitle {
+            font-size: 1.3rem;
+            color: var(--text-dim);
+            position: relative;
+            z-index: 1;
+        }
+        
+        nav {
+            background: var(--secondary);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 3rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: sticky;
+            top: 1rem;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+        
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+        }
+        
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+        
+        nav a:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+        
+        section {
+            background: var(--secondary);
+            border-radius: 15px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        section:hover {
+            border-color: var(--accent);
+            box-shadow: 0 10px 40px rgba(255, 255, 255, 0.1);
+        }
+        
+        h2 {
+            font-size: 2.2rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 1rem;
+        }
+        
+        h3 {
+            font-size: 1.6rem;
+            margin: 2rem 0 1rem;
+            color: var(--accent-2);
+        }
+        
+        h4 {
+            font-size: 1.3rem;
+            margin: 1.5rem 0 0.8rem;
+            color: var(--success);
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateX(10px);
+            border-color: var(--accent);
+        }
+        
+        .phase {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+            border-left: 4px solid var(--accent-2);
+            padding: 2rem;
+            margin: 2rem 0;
+            border-radius: 10px;
+        }
+        
+        code {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--code-bg);
+            padding: 0.2rem 0.6rem;
+            border-radius: 5px;
+            color: var(--accent);
+            font-size: 0.9em;
+        }
+        
+        pre {
+            background: var(--code-bg);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+        
+        pre code {
+            background: none;
+            padding: 0;
+            color: var(--text);
+        }
+        
+        ul, ol {
+            margin-left: 2rem;
+            margin-top: 0.5rem;
+        }
+        
+        li {
+            margin: 0.5rem 0;
+            padding-left: 0.5rem;
+        }
+        
+        a {
+            color: var(--accent);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        a:hover {
+            border-bottom-color: var(--accent);
+        }
+        
+        .resource-link {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            margin: 0.3rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .resource-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .tag {
+            display: inline-block;
+            background: #ffffff;
+            color: #000000;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin: 0.2rem;
+        }
+        
+        .tag.warning {
+            background: #bbbbbb;
+            color: #000000;
+        }
+        
+        .tag.danger {
+            background: #888888;
+            color: #ffffff;
+        }
+        
+        .tag.success {
+            background: #ffffff;
+            color: #000000;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+        
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        th {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--accent);
+            font-weight: 600;
+        }
+        
+        tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, #ffffff, #888888);
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+            padding-left: 2rem;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2.5rem;
+            top: 0.5rem;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--accent);
+            border: 3px solid var(--primary);
+        }
+        
+        .warning-box {
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid #bbbbbb;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+        }
+        
+        .info-box {
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid #ffffff;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+        }
+        
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            h2 { font-size: 1.8rem; }
+            nav ul { flex-direction: column; }
+            .container { padding: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔥 Advanced Rust Firewall</h1>
+            <p class="subtitle">Complete Implementation Guide & Research Resources</p>
+        </header>
+
+        <nav>
+            <ul>
+                <li><a href="#overview">Overview</a></li>
+                <li><a href="#research">Research Papers</a></li>
+                <li><a href="#architecture">Architecture</a></li>
+                <li><a href="#implementation">Implementation</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#testing">Testing</a></li>
+                <li><a href="#resources">Resources</a></li>
+                <li><a href="#roadmap">Roadmap</a></li>
+            </ul>
+        </nav>
+
+        <section id="overview">
+            <h2>📋 Project Overview</h2>
+            <p>Building a production-grade firewall in Rust that provides real-time packet filtering, deep packet inspection, intrusion detection, and comprehensive security features for modern network protection.</p>
+            
+            <div class="phase">
+                <h3>Why Rust?</h3>
+                <ul>
+                    <li><strong>Memory Safety:</strong> No buffer overflows, null pointers, or data races</li>
+                    <li><strong>Performance:</strong> Zero-cost abstractions, as fast as C/C++</li>
+                    <li><strong>Concurrency:</strong> Fearless concurrent programming</li>
+                    <li><strong>Modern Tooling:</strong> Cargo, built-in testing, excellent documentation</li>
+                    <li><strong>Security Focus:</strong> Perfect for security-critical applications</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h4>Key Objectives</h4>
+                <ul>
+                    <li>Real-time packet inspection and filtering</li>
+                    <li>Stateful firewall with connection tracking</li>
+                    <li>Deep Packet Inspection (DPI) capabilities</li>
+                    <li>Intrusion Detection System (IDS) integration</li>
+                    <li>Web-based management interface</li>
+                    <li>Machine learning-based threat detection</li>
+                    <li>High performance (multi-gigabit throughput)</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="research">
+            <h2>📚 Essential Research Papers & Articles</h2>
+            
+            <h3>Foundational Papers</h3>
+            
+            <div class="card">
+                <h4>1. Network Security & Firewalls</h4>
+                <ul>
+                    <li>
+                        <a href="https://dl.acm.org/doi/10.1145/268998.266669" class="resource-link" target="_blank">
+                            "Design and Implementation of a Firewall" - AT&T Labs
+                        </a>
+                        <span class="tag">Core</span>
+                    </li>
+                    <li>
+                        <a href="https://ieeexplore.ieee.org/document/5762481" class="resource-link" target="_blank">
+                            "Stateful Firewall Technology" - IEEE
+                        </a>
+                        <span class="tag">Core</span>
+                    </li>
+                    <li>
+                        <a href="https://www.usenix.org/conference/nsdi04/bro-system-detecting-network-intruders-real-time" class="resource-link" target="_blank">
+                            "Bro: A System for Detecting Network Intruders in Real-Time" - USENIX
+                        </a>
+                        <span class="tag success">IDS</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h4>2. Deep Packet Inspection</h4>
+                <ul>
+                    <li>
+                        <a href="https://www.sciencedirect.com/science/article/pii/S1389128614000085" class="resource-link" target="_blank">
+                            "Deep Packet Inspection: Trends and Challenges" - Computer Networks Journal
+                        </a>
+                        <span class="tag">DPI</span>
+                    </li>
+                    <li>
+                        <a href="https://ieeexplore.ieee.org/document/5733442" class="resource-link" target="_blank">
+                            "A Survey of Deep Packet Inspection Technologies" - IEEE Communications
+                        </a>
+                        <span class="tag">DPI</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h4>3. High-Performance Packet Processing</h4>
+                <ul>
+                    <li>
+                        <a href="https://www.usenix.org/conference/nsdi14/technical-sessions/presentation/belay" class="resource-link" target="_blank">
+                            "IX: A Protected Dataplane Operating System" - USENIX NSDI
+                        </a>
+                        <span class="tag warning">Performance</span>
+                    </li>
+                    <li>
+                        <a href="https://dl.acm.org/doi/10.1145/2775054.2694388" class="resource-link" target="_blank">
+                            "PacketShader: GPU-Accelerated Software Router" - ACM SIGCOMM
+                        </a>
+                        <span class="tag warning">Performance</span>
+                    </li>
+                    <li>
+                        <a href="https://www.dpdk.org/wp-content/uploads/sites/35/2016/10/Day02-Session01-Steve-Liang-DPDK-Tutorial.pdf" class="resource-link" target="_blank">
+                            "DPDK: Data Plane Development Kit" - Intel
+                        </a>
+                        <span class="tag warning">Performance</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h4>4. Machine Learning for Network Security</h4>
+                <ul>
+                    <li>
+                        <a href="https://arxiv.org/abs/1802.09089" class="resource-link" target="_blank">
+                            "Deep Learning for Network Traffic Classification" - arXiv
+                        </a>
+                        <span class="tag success">ML</span>
+                    </li>
+                    <li>
+                        <a href="https://ieeexplore.ieee.org/document/8307903" class="resource-link" target="_blank">
+                            "Anomaly Detection Using Machine Learning" - IEEE Access
+                        </a>
+                        <span class="tag success">ML</span>
+                    </li>
+                    <li>
+                        <a href="https://www.sciencedirect.com/science/article/pii/S1084804518300456" class="resource-link" target="_blank">
+                            "ML-based Network Intrusion Detection: Approaches and Datasets" - Elsevier
+                        </a>
+                        <span class="tag success">ML</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h4>5. Protocol Analysis & Attack Detection</h4>
+                <ul>
+                    <li>
+                        <a href="https://ieeexplore.ieee.org/document/1498475" class="resource-link" target="_blank">
+                            "TCP/IP Attack Detection Using Machine Learning" - IEEE
+                        </a>
+                        <span class="tag danger">Security</span>
+                    </li>
+                    <li>
+                        <a href="https://www.usenix.org/conference/usenixsecurity17/technical-sessions/presentation/kruegel" class="resource-link" target="_blank">
+                            "Polymorphic Worm Detection Using Structural Information" - USENIX Security
+                        </a>
+                        <span class="tag danger">Security</span>
+                    </li>
+                </ul>
+            </div>
+
+            <h3>Rust-Specific Resources</h3>
+            
+            <div class="card">
+                <h4>Rust Network Programming</h4>
+                <ul>
+                    <li>
+                        <a href="https://tokio.rs/" class="resource-link" target="_blank">
+                            Tokio - Async Runtime for Rust
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/libpnet/libpnet" class="resource-link" target="_blank">
+                            libpnet - Low-level networking in Rust
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://docs.rs/smoltcp/latest/smoltcp/" class="resource-link" target="_blank">
+                            smoltcp - TCP/IP stack for embedded systems
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/rust-lang/rust/tree/master/library/std/src/net" class="resource-link" target="_blank">
+                            Rust std::net Documentation
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="architecture">
+            <h2>🏗️ System Architecture</h2>
+            
+            <div class="info-box">
+                <h3>Multi-Layered Architecture</h3>
+                <p>The firewall follows a modular, layered architecture for maintainability and extensibility.</p>
+            </div>
+
+            <h3>Architecture Layers</h3>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <h4>1. Packet Capture Layer</h4>
+                    <p>Raw packet capturing from network interfaces using libpnet/AF_PACKET</p>
+                    <code>pnet_datalink</code>, <code>pcap</code>
+                </div>
+                
+                <div class="timeline-item">
+                    <h4>2. Packet Processing Layer</h4>
+                    <p>Protocol parsing, header extraction, and validation</p>
+                    <code>pnet_packet</code>, custom parsers
+                </div>
+                
+                <div class="timeline-item">
+                    <h4>3. Rule Engine</h4>
+                    <p>Rule matching and decision making (allow/deny/log)</p>
+                    <code>Custom DSL</code>, <code>regex</code>
+                </div>
+                
+                <div class="timeline-item">
+                    <h4>4. State Management</h4>
+                    <p>Connection tracking, session management</p>
+                    <code>DashMap</code>, <code>concurrent hash maps</code>
+                </div>
+                
+                <div class="timeline-item">
+                    <h4>5. Deep Inspection Engine</h4>
+                    <p>Application layer protocol analysis</p>
+                    <code>HTTP/TLS parsers</code>, <code>signature matching</code>
+                </div>
+                
+                <div class="timeline-item">
+                    <h4>6. Threat Detection</h4>
+                    <p>IDS/IPS functionality with ML-based anomaly detection</p>
+                    <code>rust-ndarray</code>, <code>linfa</code>
+                </div>
+                
+                <div class="timeline-item">
+                    <h4>7. Management Interface</h4>
+                    <p>Web UI and API for configuration and monitoring</p>
+                    <code>axum</code>, <code>React</code>
+                </div>
+                
+                <div class="timeline-item">
+                    <h4>8. Logging & Analytics</h4>
+                    <p>Centralized logging, metrics, and visualization</p>
+                    <code>tracing</code>, <code>prometheus</code>
+                </div>
+            </div>
+
+            <h3>File Structure</h3>
+            <pre><code>rustfirewall/
+├── Cargo.toml
+├── Cargo.lock
+├── src/
+│   ├── main.rs                 # Entry point
+│   ├── lib.rs                  # Library root
+│   ├── capture/
+│   │   ├── mod.rs              # Packet capture module
+│   │   ├── interface.rs        # Network interface handling
+│   │   └── filters.rs          # BPF filters
+│   ├── packet/
+│   │   ├── mod.rs              # Packet processing
+│   │   ├── ethernet.rs         # Ethernet layer
+│   │   ├── ip.rs               # IP layer (v4/v6)
+│   │   ├── tcp.rs              # TCP protocol
+│   │   ├── udp.rs              # UDP protocol
+│   │   └── icmp.rs             # ICMP protocol
+│   ├── rules/
+│   │   ├── mod.rs              # Rule engine
+│   │   ├── parser.rs           # Rule parser
+│   │   ├── matcher.rs          # Pattern matching
+│   │   └── chain.rs            # Rule chains
+│   ├── state/
+│   │   ├── mod.rs              # State management
+│   │   ├── connection.rs       # Connection tracking
+│   │   └── session.rs          # Session management
+│   ├── inspection/
+│   │   ├── mod.rs              # DPI module
+│   │   ├── http.rs             # HTTP inspector
+│   │   ├── tls.rs              # TLS inspector
+│   │   └── dns.rs              # DNS inspector
+│   ├── ids/
+│   │   ├── mod.rs              # IDS/IPS module
+│   │   ├── signatures.rs       # Signature database
+│   │   ├── anomaly.rs          # Anomaly detection
+│   │   └── ml_model.rs         # ML models
+│   ├── api/
+│   │   ├── mod.rs              # REST API
+│   │   ├── routes.rs           # Route handlers
+│   │   └── websocket.rs        # Real-time updates
+│   ├── web/
+│   │   └── static/             # Web UI assets
+│   ├── logging/
+│   │   ├── mod.rs              # Logging system
+│   │   └── metrics.rs          # Metrics collection
+│   └── config/
+│       ├── mod.rs              # Configuration
+│       └── settings.rs         # Settings management
+├── tests/
+│   ├── integration/
+│   └── unit/
+├── benches/                    # Performance benchmarks
+├── docs/                       # Documentation
+└── scripts/                    # Utility scripts
+    ├── install.sh
+    └── setup_env.sh</code></pre>
+        </section>
+
+        <section id="implementation">
+            <h2>⚙️ Implementation Plan</h2>
+            
+            <div class="phase">
+                <h3>Phase 1: Foundation (Weeks 1-2)</h3>
+                <span class="tag success">Current Phase</span>
+                
+                <h4>Goals</h4>
+                <ul>
+                    <li>Set up Rust project with proper toolchain</li>
+                    <li>Implement basic packet capture</li>
+                    <li>Parse Ethernet, IP, TCP, UDP headers</li>
+                    <li>Create simple allow/deny rules</li>
+                    <li>Basic CLI interface</li>
+                </ul>
+
+                <h4>Dependencies</h4>
+                <pre><code>[dependencies]
+pnet = "0.34"
+pnet_datalink = "0.34"
+pnet_packet = "0.34"
+clap = { version = "4.5", features = ["derive"] }
+tokio = { version = "1", features = ["full"] }
+tracing = "0.1"
+tracing-subscriber = "0.3"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"</code></pre>
+
+                <h4>Deliverables</h4>
+                <ul>
+                    <li>✓ Basic packet capture working</li>
+                    <li>✓ Protocol parsing (Ethernet, IP, TCP, UDP)</li>
+                    <li>✓ Simple filtering rules</li>
+                    <li>□ Logging system</li>
+                </ul>
+            </div>
+
+            <div class="phase">
+                <h3>Phase 2: Stateful Firewall (Weeks 3-4)</h3>
+                <span class="tag warning">Next</span>
+                
+                <h4>Goals</h4>
+                <ul>
+                    <li>Implement connection tracking</li>
+                    <li>Add stateful inspection</li>
+                    <li>Create rule chains (INPUT, OUTPUT, FORWARD)</li>
+                    <li>NAT/PAT support</li>
+                    <li>Configuration file support (TOML/YAML)</li>
+                </ul>
+
+                <h4>Key Components</h4>
+                <pre><code>// Connection tracking structure
+struct Connection {
+    src_ip: IpAddr,
+    dst_ip: IpAddr,
+    src_port: u16,
+    dst_port: u16,
+    protocol: Protocol,
+    state: ConnectionState,
+    packets: u64,
+    bytes: u64,
+    created_at: Instant,
+    last_seen: Instant,
+}
+
+enum ConnectionState {
+    New,
+    Established,
+    Related,
+    Invalid,
+    Closing,
+    Closed,
+}</code></pre>
+            </div>
+
+            <div class="phase">
+                <h3>Phase 3: Deep Packet Inspection (Weeks 5-6)</h3>
+                
+                <h4>Goals</h4>
+                <ul>
+                    <li>HTTP/HTTPS traffic analysis</li>
+                    <li>DNS query inspection</li>
+                    <li>TLS/SSL inspection (with proper certificates)</li>
+                    <li>Application-layer protocol detection</li>
+                    <li>Content filtering</li>
+                </ul>
+
+                <h4>Additional Dependencies</h4>
+                <pre><code>httparse = "1.8"
+rustls = "0.21"
+webpki = "0.22"
+trust-dns-proto = "0.23"
+regex = "1.10"</code></pre>
+            </div>
+
+            <div class="phase">
+                <h3>Phase 4: IDS/IPS Integration (Weeks 7-8)</h3>
+                
+                <h4>Goals</h4>
+                <ul>
+                    <li>Signature-based detection (Snort-like rules)</li>
+                    <li>Anomaly detection using ML</li>
+                    <li>Port scanning detection</li>
+                    <li>DDoS mitigation</li>
+                    <li>Threat intelligence integration</li>
+                </ul>
+
+                <h4>ML Dependencies</h4>
+                <pre><code>ndarray = "0.15"
+linfa = "0.7"
+linfa-clustering = "0.7"
+smartcore = "0.3"</code></pre>
+            </div>
+
+            <div class="phase">
+                <h3>Phase 5: Management Interface (Weeks 9-10)</h3>
+                
+                <h4>Goals</h4>
+                <ul>
+                    <li>REST API for management</li>
+                    <li>WebSocket for real-time updates</li>
+                    <li>React-based web UI</li>
+                    <li>Real-time traffic visualization</li>
+                    <li>Rule management interface</li>
+                </ul>
+
+                <h4>Web Dependencies</h4>
+                <pre><code>axum = "0.7"
+tower = "0.4"
+tower-http = "0.5"
+hyper = "1.0"
+serde_json = "1.0"</code></pre>
+            </div>
+
+            <div class="phase">
+                <h3>Phase 6: Performance & Production (Weeks 11-12)</h3>
+                
+                <h4>Goals</h4>
+                <ul>
+                    <li>Multi-threaded packet processing</li>
+                    <li>Zero-copy optimizations</li>
+                    <li>Performance benchmarking</li>
+                    <li>Memory profiling and optimization</li>
+                    <li>Production deployment scripts</li>
+                    <li>Documentation and testing</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="features">
+            <h2>🚀 Feature List</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Priority</th>
+                        <th>Phase</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Packet Capture</td>
+                        <td><span class="tag danger">Critical</span></td>
+                        <td>1</td>
+                        <td>✓ Done</td>
+                    </tr>
+                    <tr>
+                        <td>Protocol Parsing</td>
+                        <td><span class="tag danger">Critical</span></td>
+                        <td>1</td>
+                        <td>✓ Done</td>
+                    </tr>
+                    <tr>
+                        <td>Basic Rules</td>
+                        <td><span class="tag danger">Critical</span></td>
+                        <td>1</td>
+                        <td>✓ Done</td>
+                    </tr>
+                    <tr>
+                        <td>Connection Tracking</td>
+                        <td><span class="tag danger">Critical</span></td>
+                        <td>2</td>
+                        <td>□ Pending</td>
+                    </tr>
+                    <tr>
+                        <td>Stateful Inspection</td>
+                        <td><span class="tag danger">Critical</span></td>
+                        <td>2</td>
+                        <td>□ Pending</td>
+                    </tr>
+                    <tr>
+                        <td>NAT Support</td>
+                        <td><span class="tag warning">High</span></td>
+                        <td>2</td>
+                        <td>□ Pending</td>
+                    </tr>
+                    <tr>
+                        <td>HTTP Inspection</td>
+                        <td><span class="tag warning">High</span></td>
+                        <td>3</td>
+                        <td>□ Pending</td>
+                    </tr>
+                    <tr>
+                        <td>TLS Inspection</td>
+                        <td><span class="tag warning">High</span></td>
+                        <td>3</td>
+                        <td>□ Pending</td>
+                    </tr>
+                    <tr>
+                        <td>DNS Filtering</td>
+                        <td><span class="tag warning">High</span></td>
+                        <td>3</td>
+                        <td>□ Pending</td>
+                    </tr>
+                    <tr>
+                        <td>Signature-based IDS</td>
+                        <td><span class="tag warning">High</span></td>
+                        <td>4</td>
+                        <td>□ Pending</td>
+                    </tr>
+                    <tr>
+                        <td>ML Anomaly Detection</td>
+                        <td><span class="tag">Medium</span></td>
+                        <td>4</td>
+                        <td>□ Pending</td>
+                    </tr>
+                    <tr>
+                        <td>Port Scan Detection</td>
+                        <td><span class="tag">Medium</span></td>
+                        <td>4</td>
+                        <td>□ Pending</td>
+                    </tr>
+                    <tr>
+                        <td>DDoS Mitigation</td>
+                        <td><span class="tag">Medium</span></td>
+                        <td>4</td>
+                        <td>□ Pending</td>
+                    </tr>
+                    <tr>
+                        <td>REST API</td>
+                        <td><span class="tag warning">High</span></td>
+                        <td>5</td>
+                        <td>□ Pending</td>
+                    </tr>
+                    <tr>
+                        <td>Web UI</td>
+                        <td><span class="tag warning">High</span></td>
+                        <td>5</td>
+                        <td>□ Pending</td>
+                    </tr>
+                    <tr>
+                        <td>Real-time Dashboard</td>
+                        <td><span class="tag">Medium</span></td>
+                        <td>5</td>
+                        <td>□ Pending</td>
+                    </tr>
+                    <tr>
+                        <td>Performance Optimization</td>
+                        <td><span class="tag danger">Critical</span></td>
+                        <td>6</td>
+                        <td>□ Pending</td>
+                    </tr>
+                    <tr>
+                        <td>Multi-threading</td>
+                        <td><span class="tag danger">Critical</span></td>
+                        <td>6</td>
+                        <td>□ Pending</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="testing">
+            <h2>🧪 Testing Strategy</h2>
+            
+            <h3>1. Unit Testing</h3>
+            <div class="card">
+                <p>Test individual components in isolation</p>
+                <pre><code>#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_tcp_packet_parsing() {
+        let raw_packet = vec![/* ... */];
+        let packet = parse_tcp_packet(&raw_packet);
+        assert_eq!(packet.source_port, 80);
+    }
+
+    #[test]
+    fn test_rule_matching() {
+        let rule = Rule::new("block tcp any any -> any 22");
+        let packet = create_test_packet();
+        assert_eq!(rule.matches(&packet), Action::Drop);
+    }
+}</code></pre>
+            </div>
+
+            <h3>2. Integration Testing</h3>
+            <div class="card">
+                <p>Test component interactions</p>
+                <ul>
+                    <li>Packet capture → Rule engine → Action</li>
+                    <li>Connection tracking → State management</li>
+                    <li>DPI → Threat detection → Logging</li>
+                </ul>
+            </div>
+
+            <h3>3. Performance Testing</h3>
+            <div class="card">
+                <h4>Tools & Benchmarks</h4>
+                <ul>
+                    <li><strong>Criterion.rs:</strong> Micro-benchmarking</li>
+                    <li><strong>iperf3:</strong> Throughput testing</li>
+                    <li><strong>hping3:</strong> Packet generation</li>
+                    <li><strong>tcpreplay:</strong> PCAP replay</li>
+                </ul>
+                
+                <pre><code>use criterion::{black_box, criterion_group, criterion_main, Criterion};
+
+fn benchmark_packet_processing(c: &mut Criterion) {
+    c.bench_function("process_packet", |b| {
+        b.iter(|| process_packet(black_box(&test_packet)))
+    });
+}</code></pre>
+            </div>
+
+            <h3>4. Security Testing</h3>
+            <div class="card">
+                <h4>Attack Scenarios</h4>
+                <ul>
+                    <li>SYN flood attacks</li>
+                    <li>Port scanning (nmap, masscan)</li>
+                    <li>Fragmentation attacks</li>
+                    <li>Application-layer attacks (HTTP flood, Slowloris)</li>
+                    <li>Malformed packet handling</li>
+                </ul>
+                
+                <h4>Testing Tools</h4>
+                <ul>
+                    <li><code>nmap</code> - Port scanning</li>
+                    <li><code>hping3</code> - Packet crafting</li>
+                    <li><code>scapy</code> - Python packet manipulation</li>
+                    <li><code>metasploit</code> - Penetration testing</li>
+                    <li><code>slowhttptest</code> - Slow attacks</li>
+                </ul>
+            </div>
+
+            <h3>5. Fuzzing</h3>
+            <div class="card">
+                <p>Use cargo-fuzz to find edge cases</p>
+                <pre><code>cargo install cargo-fuzz
+cargo fuzz init
+cargo fuzz run fuzz_target_1</code></pre>
+            </div>
+        </section>
+
+        <section id="resources">
+            <h2>📖 Learning Resources</h2>
+            
+            <h3>Books</h3>
+            <div class="card">
+                <ul>
+                    <li><strong>"The Rust Programming Language"</strong> - Official Rust Book</li>
+                    <li><strong>"Programming Rust"</strong> - O'Reilly (2nd Edition)</li>
+                    <li><strong>"Rust for Rustaceans"</strong> - Jon Gjengset</li>
+                    <li><strong>"Network Security: Private Communication in a Public World"</strong> - Kaufman et al.</li>
+                    <li><strong>"TCP/IP Illustrated, Volume 1"</strong> - W. Richard Stevens</li>
+                    <li><strong>"Firewalls and Internet Security"</strong> - Cheswick & Bellovin</li>
+                </ul>
+            </div>
+
+            <h3>Online Courses</h3>
+            <div class="card">
+                <ul>
+                    <li><a href="https://www.udacity.com/course/network-security--ud199" class="resource-link" target="_blank">Network Security - Udacity</a></li>
+                    <li><a href="https://www.coursera.org/learn/network-security" class="resource-link" target="_blank">Network Security & Database Vulnerabilities - Coursera</a></li>
+                    <li><a href="https://www.udemy.com/course/rust-lang/" class="resource-link" target="_blank">The Rust Programming Language - Udemy</a></li>
+                </ul>
+            </div>
+
+            <h3>Documentation</h3>
+            <div class="card">
+                <ul>
+                    <li><a href="https://doc.rust-lang.org/" class="resource-link" target="_blank">Official Rust Documentation</a></li>
+                    <li><a href="https://docs.rs/" class="resource-link" target="_blank">Docs.rs - Crate Documentation</a></li>
+                    <li><a href="https://www.rfc-editor.org/rfc/rfc793" class="resource-link" target="_blank">RFC 793 - TCP</a></li>
+                    <li><a href="https://www.rfc-editor.org/rfc/rfc791" class="resource-link" target="_blank">RFC 791 - IP</a></li>
+                    <li><a href="https://www.ietf.org/rfc/rfc2828.txt" class="resource-link" target="_blank">RFC 2828 - Security Glossary</a></li>
+                </ul>
+            </div>
+
+            <h3>GitHub Repositories</h3>
+            <div class="card">
+                <ul>
+                    <li><a href="https://github.com/rustsec/advisory-db" class="resource-link" target="_blank">RustSec Advisory Database</a></li>
+                    <li><a href="https://github.com/snort3/snort3" class="resource-link" target="_blank">Snort3 - Network IDS</a></li>
+                    <li><a href="https://github.com/suricata/suricata" class="resource-link" target="_blank">Suricata - Network Security Monitor</a></li>
+                    <li><a href="https://github.com/google/tink" class="resource-link" target="_blank">Tink - Cryptographic Library</a></li>
+                </ul>
+            </div>
+
+            <h3>Communities & Forums</h3>
+            <div class="card">
+                <ul>
+                    <li><a href="https://users.rust-lang.org/" class="resource-link" target="_blank">Rust Users Forum</a></li>
+                    <li><a href="https://www.reddit.com/r/rust/" class="resource-link" target="_blank">r/rust on Reddit</a></li>
+                    <li><a href="https://discord.gg/rust-lang" class="resource-link" target="_blank">Rust Discord</a></li>
+                    <li><a href="https://security.stackexchange.com/" class="resource-link" target="_blank">Information Security StackExchange</a></li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="roadmap">
+            <h2>🗺️ Development Roadmap</h2>
+            
+            <div class="warning-box">
+                <h3>⚠️ Important Considerations</h3>
+                <ul>
+                    <li><strong>Privileges:</strong> Firewall requires root/admin privileges for packet capture</li>
+                    <li><strong>Performance:</strong> Target 1-10 Gbps throughput depending on features enabled</li>
+                    <li><strong>Security:</strong> Regular security audits and dependency updates</li>
+                    <li><strong>Testing:</strong> Extensive testing in isolated environments before production</li>
+                    <li><strong>Documentation:</strong> Keep comprehensive documentation throughout development</li>
+                </ul>
+            </div>
+
+            <h3>Milestones</h3>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Milestone</th>
+                        <th>Target</th>
+                        <th>Features</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>v0.1.0 - MVP</strong></td>
+                        <td>Week 2</td>
+                        <td>Basic packet filtering, CLI</td>
+                    </tr>
+                    <tr>
+                        <td><strong>v0.2.0 - Stateful</strong></td>
+                        <td>Week 4</td>
+                        <td>Connection tracking, rule chains</td>
+                    </tr>
+                    <tr>
+                        <td><strong>v0.3.0 - DPI</strong></td>
+                        <td>Week 6</td>
+                        <td>Deep packet inspection, protocol analysis</td>
+                    </tr>
+                    <tr>
+                        <td><strong>v0.4.0 - IDS</strong></td>
+                        <td>Week 8</td>
+                        <td>Intrusion detection, ML anomaly detection</td>
+                    </tr>
+                    <tr>
+                        <td><strong>v0.5.0 - Management</strong></td>
+                        <td>Week 10</td>
+                        <td>Web UI, REST API, monitoring</td>
+                    </tr>
+                    <tr>
+                        <td><strong>v1.0.0 - Production</strong></td>
+                        <td>Week 12</td>
+                        <td>Optimized, tested, documented, production-ready</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Beyond v1.0</h3>
+            <div class="card">
+                <h4>Future Enhancements</h4>
+                <ul>
+                    <li>IPv6 full support</li>
+                    <li>VPN integration</li>
+                    <li>Cloud-based threat intelligence</li>
+                    <li>Distributed firewall clustering</li>
+                    <li>Hardware acceleration (DPDK, XDP)</li>
+                    <li>Container/Kubernetes integration</li>
+                    <li>Advanced ML models for zero-day detection</li>
+                    <li>Blockchain-based audit logging</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="best-practices">
+            <h2>✅ Best Practices & Guidelines</h2>
+            
+            <h3>Code Quality</h3>
+            <div class="card">
+                <ul>
+                    <li><strong>Use clippy:</strong> <code>cargo clippy -- -D warnings</code></li>
+                    <li><strong>Format code:</strong> <code>cargo fmt</code></li>
+                    <li><strong>Write tests:</strong> Aim for >80% code coverage</li>
+                    <li><strong>Document code:</strong> Use <code>///</code> doc comments</li>
+                    <li><strong>Use cargo-audit:</strong> Check for security vulnerabilities</li>
+                </ul>
+            </div>
+
+            <h3>Performance</h3>
+            <div class="card">
+                <ul>
+                    <li>Use <code>--release</code> builds for production</li>
+                    <li>Profile with <code>perf</code>, <code>valgrind</code>, or <code>cargo flamegraph</code></li>
+                    <li>Minimize allocations in hot paths</li>
+                    <li>Use zero-copy techniques where possible</li>
+                    <li>Consider lock-free data structures</li>
+                    <li>Benchmark regularly with realistic workloads</li>
+                </ul>
+            </div>
+
+            <h3>Security</h3>
+            <div class="card">
+                <ul>
+                    <li>Never trust user input - validate everything</li>
+                    <li>Use strong typing to prevent bugs</li>
+                    <li>Avoid unsafe code unless absolutely necessary</li>
+                    <li>Regular dependency updates: <code>cargo update</code></li>
+                    <li>Security audit: <code>cargo audit</code></li>
+                    <li>Follow principle of least privilege</li>
+                    <li>Implement rate limiting and resource controls</li>
+                </ul>
+            </div>
+
+            <h3>Git Workflow</h3>
+            <div class="card">
+                <ul>
+                    <li>Use feature branches</li>
+                    <li>Write meaningful commit messages</li>
+                    <li>Keep commits atomic and focused</li>
+                    <li>Use tags for releases</li>
+                    <li>Maintain a detailed CHANGELOG.md</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="quick-start">
+            <h2>🚀 Quick Start Guide</h2>
+            
+            <h3>Development Environment Setup</h3>
+            <pre><code># Install Rust
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+# Install required system packages (Ubuntu/Debian)
+sudo apt-get update
+sudo apt-get install -y libpcap-dev build-essential pkg-config
+
+# Clone the repository
+git clone https://github.com/yourusername/rustfirewall.git
+cd rustfirewall
+
+# Build the project
+cargo build
+
+# Run tests
+cargo test
+
+# Run with root privileges
+sudo cargo run</code></pre>
+
+            <h3>Basic Configuration Example</h3>
+            <pre><code># firewall.toml
+[global]
+interface = "eth0"
+log_level = "info"
+log_file = "/var/log/rustfirewall.log"
+
+[[rules]]
+action = "allow"
+protocol = "tcp"
+src_ip = "192.168.1.0/24"
+dst_port = 80
+
+[[rules]]
+action = "allow"
+protocol = "tcp"
+src_ip = "any"
+dst_port = 443
+
+[[rules]]
+action = "deny"
+protocol = "tcp"
+src_ip = "any"
+dst_port = 22
+src_ip_not = "192.168.1.100"
+
+[[rules]]
+action = "deny"
+protocol = "any"
+src_ip = "any"
+dst_ip = "any"</code></pre>
+        </section>
+
+        <footer style="text-align: center; padding: 3rem 0; color: var(--text-dim); margin-top: 4rem;">
+            <p>🔥 <strong>Rust Firewall Project</strong> - Building the Future of Network Security 🔥</p>
+            <p style="margin-top: 1rem;">Last Updated: January 2026</p>
+            <p style="margin-top: 0.5rem; font-size: 0.9rem;">
+                Remember: Start simple, iterate, and continuously improve. Every expert was once a beginner.
+            </p>
+        </footer>
+    </div>
+</body>
+</html>
